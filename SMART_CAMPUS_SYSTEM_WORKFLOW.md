@@ -34,17 +34,17 @@ The **Smart Campus Management System** is a unified, real-time enterprise platfo
 
 Use these seeded credentials to test and demo the system across all role views:
 
-| Role Name | User Name | Email | Password | Role Key | Student Type / Scope | Default Dashboard |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **System Admin** | System Admin | `admin@smartcampus.com` | `Admin@12345` | `super_admin` | Unrestricted Access | `/admin/dashboard` |
-| **Event Manager** | Ethan Organizer | `organizer@smartcampus.com` | `Organizer@12345` | `event_organizer` | Campus Events & Venues | `/event-organizer/dashboard` |
-| **Library Manager** | Laura Librarian | `librarian@smartcampus.com` | `Librarian@12345` | `librarian` | Catalog, Borrows, Fines | `/librarian/dashboard` |
-| **Hostel Manager** | Henry Warden | `warden@smartcampus.com` | `Warden@12345` | `hostel_warden` | Rooms, Beds, Leaves | `/warden/dashboard` |
-| **Mess Manager** | Marcus Mess | `mess@smartcampus.com` | `Mess@12345` | `mess_manager` | Menus, Meal Attendance | `/mess-manager/dashboard` |
-| **Bus Manager / Driver**| David Driver | `driver@smartcampus.com` | `Driver@12345` | `bus_driver` | Bus Routes & Daily Trips | `/driver/dashboard` |
-| **Faculty** | Prof. Sarah Connor | `faculty@smartcampus.com` | `Faculty@12345` | `faculty` | Event Reg & Certificates | `/faculty/dashboard` |
-| **Student (Hosteller)** | Alex Student | `student@smartcampus.com` | `Student@12345` | `student` | `HOSTELLER` | `/dashboard` |
-| **Student (Day Scholar)**| Karan Malhotra | `student11@smartcampus.com` | `Student11@12345` | `student` | `DAY_SCHOLAR` | `/dashboard` |
+| Role Name               | User Name          | Email                        | Password           | Role Key          | Student Type / Scope   | Default Dashboard          |
+| :---------------------- | :----------------- | :--------------------------- | :----------------- | :---------------- | :--------------------- | :------------------------- |
+| **System Admin**        | System Admin       | `admin@smartcampus.com`      | `Admin@12345`      | `super_admin`     | Unrestricted Access    | `/admin/dashboard`         |
+| **Event Manager**       | Ethan Organizer    | `organizer@smartcampus.com`  | `Organizer@12345`  | `event_organizer` | Campus Events & Venues | `/event-organizer/dashboard`|
+| **Library Manager**     | Laura Librarian    | `librarian@smartcampus.com`  | `Librarian@12345`  | `librarian`       | Catalog, Borrows, Fines| `/librarian/dashboard`     |
+| **Hostel Manager**      | Henry Warden       | `warden@smartcampus.com`     | `Warden@12345`     | `hostel_warden`   | Rooms, Beds, Leaves    | `/warden/dashboard`        |
+| **Mess Manager**        | Marcus Mess        | `mess@smartcampus.com`       | `Mess@12345`       | `mess_manager`    | Menus, Meal Attendance | `/mess-manager/dashboard`  |
+| **Bus Manager / Driver**| David Driver       | `driver@smartcampus.com`     | `Driver@12345`     | `bus_driver`      | Bus Routes & Trips     | `/driver/dashboard`        |
+| **Faculty**             | Prof. Sarah Connor | `faculty@smartcampus.com`    | `Faculty@12345`    | `faculty`         | Event Reg & Certs      | `/faculty/dashboard`       |
+| **Student (Hosteller)** | Alex Student       | `student@smartcampus.com`    | `Student@12345`    | `student`         | `HOSTELLER`            | `/dashboard`               |
+| **Student (Day Scholar)**| Karan Malhotra    | `student11@smartcampus.com`  | `Student11@12345`  | `student`         | `DAY_SCHOLAR`          | `/dashboard`               |
 
 ---
 
@@ -131,18 +131,18 @@ Use these seeded credentials to test and demo the system across all role views:
 
 ## 🔒 4. Role-Based Access Control (RBAC) Matrix
 
-| Feature / Page | Super Admin | Event Organizer | Librarian | Hostel Warden | Mess Manager | Bus Driver | Faculty | Student |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **System Admin Dashboard** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **User & Role Management** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Hall Management** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Create & Edit Events** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Event QR Check-in** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Browse & Register Events**| ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Issue / Return Books** | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Hostel & Bed Allocation** | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Mess Menu & Feedback** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Bus Routes & Drivers** | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| Feature / Page             | Super Admin | Event Organizer | Librarian | Hostel Warden | Mess Manager | Bus Driver | Faculty | Student |
+| :------------------------- | :---------: | :-------------: | :-------: | :-----------: | :----------: | :--------: | :-----: | :-----: |
+| **System Admin Dashboard**  |      ✅     |        ❌        |     ❌     |       ❌       |      ❌       |     ❌     |    ❌    |    ❌    |
+| **User & Role Management**  |      ✅     |        ❌        |     ❌     |       ❌       |      ❌       |     ❌     |    ❌    |    ❌    |
+| **Hall Management**        |      ✅     |        ❌        |     ❌     |       ❌       |      ❌       |     ❌     |    ❌    |    ❌    |
+| **Create & Edit Events**   |      ✅     |        ✅        |     ❌     |       ❌       |      ❌       |     ❌     |    ❌    |    ❌    |
+| **Event QR Check-in**      |      ✅     |        ✅        |     ❌     |       ❌       |      ❌       |     ❌     |    ❌    |    ❌    |
+| **Browse & Register Events**|      ✅     |        ✅        |     ✅     |       ✅       |      ✅       |     ✅     |    ✅    |    ✅    |
+| **Issue / Return Books**   |      ✅     |        ❌        |     ✅     |       ❌       |      ❌       |     ❌     |    ❌    |    ❌    |
+| **Hostel & Bed Allocation**|      ✅     |        ❌        |     ❌     |       ✅       |      ❌       |     ❌     |    ❌    |    ❌    |
+| **Mess Menu & Feedback**   |      ✅     |        ❌        |     ❌     |       ❌       |      ✅       |     ❌     |    ❌    |    ❌    |
+| **Bus Routes & Drivers**   |      ✅     |        ❌        |     ❌     |       ❌       |      ❌       |     ✅     |    ❌    |    ❌    |
 
 ---
 
