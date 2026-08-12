@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/lib/types/database.types";
-import { ROLE_ROUTES, ROLE_DASHBOARDS, type UserRole } from "@/lib/types/roles";
+import { ROLE_ROUTES, ROLE_DASHBOARDS, type UserRole } from "./lib/types/role-constants";
 
 // Routes accessible without authentication
 const PUBLIC_ROUTES = [

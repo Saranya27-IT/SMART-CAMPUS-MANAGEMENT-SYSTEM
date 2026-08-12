@@ -13,15 +13,15 @@ import { Loader2, CalendarDays } from "lucide-react";
 
 interface EventFormSheetProps {
   open: boolean;
-  onClose: () => void;
+  onOpenChange?: (open: boolean) => void;
   event?: any;           // Existing event for edit
-  categories: any[];
-  halls: any[];
+  categories?: any[];
+  halls?: any[];
 }
 
 const EVENT_STATUSES = ["draft", "upcoming", "ongoing", "completed", "cancelled"];
 
-export function EventFormSheet({ open, onClose, event, categories, halls }: EventFormSheetProps) {
+export function EventFormSheet({ open, onOpenChange = () => {}, event, categories = [], halls = [] }: EventFormSheetProps) {
   const isEditing = !!event;
   const [isPending, startTransition] = useTransition();
 
@@ -89,13 +89,13 @@ export function EventFormSheet({ open, onClose, event, categories, halls }: Even
         toast.error(result.error);
       } else {
         toast.success(isEditing ? "Event updated successfully." : "Event created successfully.");
-        onClose();
+        onOpenChange(false);
       }
     });
   }
 
   return (
-    <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
+    <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full sm:max-w-xl overflow-y-auto">
         <SheetHeader className="pb-4">
           <div className="flex items-center gap-3">
@@ -285,7 +285,7 @@ export function EventFormSheet({ open, onClose, event, categories, halls }: Even
           </div>
 
           <SheetFooter className="pt-4 gap-2">
-            <Button type="button" variant="outline" onClick={onClose} disabled={isPending} id="event-form-cancel-btn">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending} id="event-form-cancel-btn">
               Cancel
             </Button>
             <Button

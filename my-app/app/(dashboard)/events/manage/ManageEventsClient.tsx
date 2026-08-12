@@ -197,7 +197,7 @@ export function ManageEventsClient({ events: initialEvents, categories, halls, i
 
       <EventFormSheet
         open={sheetOpen}
-        onClose={handleClose}
+        onOpenChange={(v) => !v && handleClose()}
         event={editingEvent}
         categories={categories}
         halls={halls}
