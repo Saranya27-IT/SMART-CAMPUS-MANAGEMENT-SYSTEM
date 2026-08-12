@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/lib/types/database.types";
-import { ROLE_ROUTES, ROLE_DASHBOARDS, type UserRole } from "./lib/types/role-constants";
+import { ROLE_ROUTES, ROLE_DASHBOARDS, type UserRole } from "@/lib/types/role-constants";
 
 // Routes accessible without authentication
 const PUBLIC_ROUTES = [
@@ -52,18 +52,23 @@ export async function middleware(request: NextRequest) {
 
     const { pathname } = request.nextUrl;
 
-    // Fetch role safely
+    // Fetch role safely — prioritize user_metadata for fast Edge evaluation
     let role: UserRole | undefined = undefined;
     if (user) {
-      try {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .single();
-        role = ((profile as any)?.role || user.user_metadata?.role || "student") as UserRole;
-      } catch {
-        role = (user.user_metadata?.role || "student") as UserRole;
+      const metaRole = user.user_metadata?.role as UserRole | undefined;
+      if (metaRole && ROLE_DASHBOARDS[metaRole]) {
+        role = metaRole;
+      } else {
+        try {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+          role = ((profile as any)?.role || "student") as UserRole;
+        } catch {
+          role = "student";
+        }
       }
     }
 
