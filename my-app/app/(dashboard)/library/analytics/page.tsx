@@ -1,41 +1,28 @@
+import { redirect } from "next/navigation";
 import { getLibraryAnalytics } from "@/lib/actions/library";
 import { PageHeader } from "@/components/common/PageHeader";
-import { StatCard } from "@/components/common/StatCard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, BookMarked, TrendingUp, Library } from "lucide-react";
+import { getCurrentUser } from "@/lib/actions/auth";
+import { LibraryAnalyticsClient } from "./LibraryAnalyticsClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Library Analytics — Smart Campus",
+  description: "Circulation metrics, category breakdowns, and physical inventory analytics.",
 };
 
 export default async function LibraryAnalyticsPage() {
+  const profile = await getCurrentUser();
+  if (!profile) redirect("/login");
+
   const analytics = await getLibraryAnalytics();
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Library Analytics"
-        description="Circulation statistics, circulation rates, and book activity."
+        title="Library Analytics & Intelligence"
+        description="Comprehensive circulation data, category distribution, loan ratios, and fee collection."
       />
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Total Catalogue" value={analytics.totalBooks} icon={Library} color="indigo" />
-        <StatCard title="Active Borrows" value={analytics.activeBorrows} icon={BookMarked} color="amber" />
-        <StatCard title="Overdue Items" value={analytics.overdue} icon={TrendingUp} color="rose" />
-        <StatCard title="Returned This Month" value={analytics.returnedThisMonth} icon={BookOpen} color="emerald" />
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Circulation Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Total transactions processed to date: <span className="font-semibold text-foreground">{analytics.totalBorrows}</span>
-          </p>
-        </CardContent>
-      </Card>
+      <LibraryAnalyticsClient analytics={analytics} />
     </div>
   );
 }

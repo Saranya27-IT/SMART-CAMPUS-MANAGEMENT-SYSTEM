@@ -1,29 +1,32 @@
-import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/common/PageHeader";
+import { getBookCopies, getBooks } from "@/lib/actions/library";
+import { getCurrentUser } from "@/lib/actions/auth";
 import { BookCopiesTable } from "./BookCopiesTable";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Book Copies & QR Codes — Library",
+  title: "Book Copies — Library | Smart Campus",
+  description: "Track physical book copies, accession numbers, and availability statuses.",
 };
 
 export default async function BookCopiesPage() {
-  const supabase = await createClient();
+  const profile = await getCurrentUser();
+  if (!profile) redirect("/login");
 
-  const { data: copiesData } = await supabase
-    .from("book_copies")
-    .select(`*, books(title, isbn)`)
-    .limit(50);
+  const isLibrarian = profile.role === "librarian" || profile.role === "super_admin";
+  const { data: copies } = await getBookCopies();
+  const { data: books } = await getBooks();
 
-  const copies = (copiesData ?? []) as any[];
+  const formattedBooks = (books ?? []).map((b: any) => ({ id: b.id, title: b.title }));
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Book Physical Copies & Barcode / QR Tokens"
-        description="Track individual book copy numbers, QR identifiers, and loan status."
+        title="Physical Book Copies"
+        description="Monitor physical accession barcodes, QR tokens, condition, and shelf availability."
       />
-      <BookCopiesTable copies={copies} />
+      <BookCopiesTable copies={copies ?? []} books={formattedBooks} isLibrarian={isLibrarian} />
     </div>
   );
 }
