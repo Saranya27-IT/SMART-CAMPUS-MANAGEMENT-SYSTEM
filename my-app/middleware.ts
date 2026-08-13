@@ -103,13 +103,20 @@ function parseRole(rawRole: unknown): UserRole {
 }
 
 function createRedirectResponse(
-  targetUrl: URL | string,
+  targetPathOrUrl: string | URL,
   request: NextRequest,
   supabaseResponse: NextResponse
 ) {
-  const redirectResponse = NextResponse.redirect(
-    typeof targetUrl === "string" ? new URL(targetUrl, request.url) : targetUrl
-  );
+  let redirectUrl: URL;
+  if (typeof targetPathOrUrl === "string") {
+    redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = targetPathOrUrl;
+    redirectUrl.search = "";
+  } else {
+    redirectUrl = targetPathOrUrl;
+  }
+
+  const redirectResponse = NextResponse.redirect(redirectUrl);
   try {
     supabaseResponse.cookies.getAll().forEach((cookie) => {
       redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
@@ -198,7 +205,8 @@ export async function middleware(request: NextRequest) {
 
     // Not authenticated → redirect to login
     if (!user) {
-      const loginUrl = new URL("/login", request.url);
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
       loginUrl.searchParams.set("redirect", pathname);
       return createRedirectResponse(loginUrl, request, supabaseResponse);
     }
