@@ -115,7 +115,7 @@ export function DataTable<T extends Record<string, unknown>>({
       )}
 
       {/* Table */}
-      <div className="rounded-lg border overflow-hidden">
+      <div className="table-responsive-container">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/30 hover:bg-muted/30">

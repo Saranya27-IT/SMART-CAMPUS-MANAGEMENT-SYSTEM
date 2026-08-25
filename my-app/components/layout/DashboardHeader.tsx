@@ -18,6 +18,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ROLE_NAV, ROLE_LABELS, ROLE_COLORS } from "@/lib/types/roles";
 import { useNotifications } from "@/hooks/use-notifications";
 import { logout } from "@/lib/actions/auth";
@@ -167,6 +168,9 @@ export function DashboardHeader({ profile }: DashboardHeaderProps) {
 
       {/* Right actions */}
       <div className="flex items-center gap-2">
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         {/* Notifications */}
         <Link href="/notifications">
           <Button variant="ghost" size="icon" className="relative" id="notifications-btn">
