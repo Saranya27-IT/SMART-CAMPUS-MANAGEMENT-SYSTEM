@@ -947,3 +947,42 @@ export async function getLibraryAnalytics() {
     categoryDistribution,
   };
 }
+
+export async function reserveBook(bookId: string) {
+  const { error: authErr, profile } = await requireAuthUser();
+  if (authErr || !profile) return { error: authErr };
+
+  const supabase = await createClient();
+
+  const { data: bookData, error: bookErr } = await supabase
+    .from("books")
+    .select("id, title, available_copies")
+    .eq("id", bookId)
+    .single();
+
+  const book = bookData as any;
+  if (bookErr || !book) {
+    return { error: "Book not found." };
+  }
+
+  // Insert notification to the student confirming hold
+  await supabase.from("notifications").insert({
+    user_id: profile.id,
+    title: "Book Reservation Placed",
+    message: `You have placed a hold on "${book.title}". You will receive an alert as soon as a copy is returned to the counter.`,
+    type: "library",
+  } as never);
+
+  // Insert audit log
+  await supabase.from("audit_logs").insert({
+    actor_id: profile.id,
+    action: "RESERVE_BOOK",
+    entity_type: "books",
+    entity_id: bookId,
+    metadata: { title: book.title },
+  } as never);
+
+  revalidatePath(`/library/books/${bookId}`);
+  revalidatePath("/library");
+  return { success: true, message: `Reservation placed for "${book.title}".` };
+}

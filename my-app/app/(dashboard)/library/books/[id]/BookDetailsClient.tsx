@@ -5,14 +5,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft, BookOpen, Building2, Calendar, CheckCircle2,
-  Copy, Hash, Layers, QrCode, Trash2, UserCheck, AlertCircle, Loader2
+  Copy, Hash, Layers, QrCode, Trash2, UserCheck, AlertCircle, Loader2, BookmarkPlus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
-import { deleteBook } from "@/lib/actions/library";
+import { deleteBook, reserveBook } from "@/lib/actions/library";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface BookDetailsProps {
   book: any;
@@ -23,6 +24,7 @@ export function BookDetailsClient({ book, isLibrarian }: BookDetailsProps) {
   const router = useRouter();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [reserving, setReserving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleDelete() {
@@ -36,6 +38,18 @@ export function BookDetailsClient({ book, isLibrarian }: BookDetailsProps) {
     } else {
       router.push("/library/books");
       router.refresh();
+    }
+  }
+
+  async function handleReserve() {
+    setReserving(true);
+    const res = await reserveBook(book.id);
+    setReserving(false);
+
+    if (res.error) {
+      toast.error(res.error);
+    } else {
+      toast.success(res.message || `Hold placed successfully for "${book.title}".`);
     }
   }
 
@@ -69,17 +83,32 @@ export function BookDetailsClient({ book, isLibrarian }: BookDetailsProps) {
             </CardDescription>
           </div>
 
-          {isLibrarian && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200"
-              onClick={() => setDeleteOpen(true)}
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete Book
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {!isLibrarian && (
+              <Button
+                variant={book.available_copies === 0 ? "default" : "outline"}
+                size="sm"
+                disabled={reserving}
+                className={book.available_copies === 0 ? "gradient-primary text-white border-0 gap-1.5 text-xs" : "gap-1.5 text-xs"}
+                onClick={handleReserve}
+              >
+                <BookmarkPlus className="h-4 w-4" />
+                {reserving ? "Placing Hold..." : book.available_copies === 0 ? "Reserve / Place Hold" : "Reserve Copy"}
+              </Button>
+            )}
+
+            {isLibrarian && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200"
+                onClick={() => setDeleteOpen(true)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Book
+              </Button>
+            )}
+          </div>
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -108,13 +137,18 @@ export function BookDetailsClient({ book, isLibrarian }: BookDetailsProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center justify-between p-4 rounded-xl bg-card border">
             <div>
-              <span className="text-xs text-muted-foreground block">Available Copies</span>
+              <span className="text-xs text-muted-foreground block font-medium">Available Copies Status</span>
               <span className={cn("text-2xl font-bold tabular-nums", book.available_copies > 0 ? "text-emerald-600" : "text-rose-600")}>
-                {book.available_copies} / {book.total_copies}
+                {book.available_copies} / {book.total_copies} available
               </span>
             </div>
+            {book.available_copies === 0 && (
+              <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200 text-xs">
+                All copies currently in circulation
+              </Badge>
+            )}
           </div>
         </CardContent>
       </Card>

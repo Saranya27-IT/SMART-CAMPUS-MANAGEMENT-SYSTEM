@@ -978,3 +978,46 @@ export async function recordFeePayment(feeId: string, paymentAmount: number) {
   }
   return { error: error?.message };
 }
+
+export async function markFeePaid(feeId: string) {
+  const supabase = await createClient();
+  const { data: feeData } = await supabase.from("hostel_fees").select("amount").eq("id", feeId).single();
+  const fee = feeData as any;
+  if (!fee) return { error: "Fee record not found" };
+  return recordFeePayment(feeId, Number(fee.amount) || 0);
+}
+
+export async function requestRoomTransfer(input: {
+  currentRoom?: string;
+  preferredBlock?: string;
+  reason: string;
+  medicalOrSpecialRequirement?: string;
+}) {
+  const authCheck = await checkHostelAuthorization();
+  if (!authCheck.allowed) return { error: authCheck.error };
+
+  const supabase = await createClient();
+  const student = authCheck.user!;
+
+  const { error } = await supabase.from("hostel_complaints").insert({
+    student_id: student.id,
+    category: "maintenance",
+    title: "Room Transfer & Reallocation Request",
+    description: `Preferred Block: ${input.preferredBlock || "Any"}. Reason: ${input.reason}. Notes: ${input.medicalOrSpecialRequirement || "None"}`,
+    priority: "medium",
+    status: "open",
+  } as never);
+
+  if (error) return { error: error.message };
+
+  await supabase.from("notifications").insert({
+    user_id: student.id,
+    title: "Room Transfer Request Logged",
+    message: "Your room transfer application has been submitted to the Hostel Warden for review.",
+    type: "hostel",
+  } as never);
+
+  revalidatePath("/hostel");
+  revalidatePath("/warden/dashboard");
+  return { success: true, message: "Room transfer application submitted successfully." };
+}

@@ -9,9 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Building2, BedDouble, ClipboardList, AlertCircle, CreditCard, CalendarCheck, ShieldAlert, Plus, CheckCircle2, XCircle, Clock, MapPin, Users, Phone } from "lucide-react";
+import { Building2, BedDouble, ClipboardList, AlertCircle, CreditCard, CalendarCheck, ShieldAlert, Plus, CheckCircle2, XCircle, Clock, MapPin, Users, Phone, ArrowRightLeft } from "lucide-react";
 import { toast } from "sonner";
-import { createLeaveRequest, createHostelComplaint } from "@/lib/actions/hostel";
+import { createLeaveRequest, createHostelComplaint, requestRoomTransfer } from "@/lib/actions/hostel";
 import { format } from "date-fns";
 
 type Props = {
@@ -24,6 +24,7 @@ export function StudentHostelClient({ overviewData }: Props) {
   // Modals state
   const [leaveOpen, setLeaveOpen] = useState(false);
   const [complaintOpen, setComplaintOpen] = useState(false);
+  const [transferOpen, setTransferOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   // Leave Form State
@@ -37,6 +38,11 @@ export function StudentHostelClient({ overviewData }: Props) {
   const [complaintCategory, setComplaintCategory] = useState("maintenance");
   const [complaintDescription, setComplaintDescription] = useState("");
   const [complaintPriority, setComplaintPriority] = useState("medium");
+
+  // Transfer Form State
+  const [preferredBlock, setPreferredBlock] = useState("Any");
+  const [transferReason, setTransferReason] = useState("");
+  const [specialNotes, setSpecialNotes] = useState("");
 
   if (isDayScholar) {
     return (
@@ -136,6 +142,32 @@ export function StudentHostelClient({ overviewData }: Props) {
     }
   }
 
+  async function handleTransferSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!transferReason || transferReason.trim().length < 5) {
+      toast.error("Please provide a reason for the room transfer request.");
+      return;
+    }
+
+    setSubmitting(true);
+    const res = await requestRoomTransfer({
+      currentRoom: allocation ? `${allocation.hostel_name} - ${allocation.room_number}` : undefined,
+      preferredBlock: preferredBlock,
+      reason: transferReason,
+      medicalOrSpecialRequirement: specialNotes,
+    });
+    setSubmitting(false);
+
+    if (res.error) {
+      toast.error(res.error);
+    } else {
+      toast.success("Room transfer request submitted to Warden successfully.");
+      setTransferOpen(false);
+      setTransferReason("");
+      setSpecialNotes("");
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Allocation Banner Card */}
@@ -160,9 +192,12 @@ export function StudentHostelClient({ overviewData }: Props) {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                 <Button size="sm" className="gap-1.5 flex-1 sm:flex-initial" onClick={() => setLeaveOpen(true)}>
                   <Plus className="w-4 h-4" /> Apply Leave
+                </Button>
+                <Button size="sm" variant="outline" className="gap-1.5 flex-1 sm:flex-initial" onClick={() => setTransferOpen(true)}>
+                  <ArrowRightLeft className="w-4 h-4 text-indigo-500" /> Room Change
                 </Button>
                 <Button size="sm" variant="outline" className="gap-1.5 flex-1 sm:flex-initial" onClick={() => setComplaintOpen(true)}>
                   <AlertCircle className="w-4 h-4 text-rose-500" /> Raise Complaint
@@ -484,6 +519,61 @@ export function StudentHostelClient({ overviewData }: Props) {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Room Transfer Request Modal */}
+      <Dialog open={transferOpen} onOpenChange={setTransferOpen}>
+        <DialogContent className="sm:max-w-[480px]">
+          <DialogHeader>
+            <DialogTitle>Request Room Transfer / Reallocation</DialogTitle>
+            <DialogDescription>Submit a formal transfer request to the Hostel Warden.</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleTransferSubmit} className="space-y-4 py-2">
+            <div className="p-3 rounded-lg border bg-muted/40 text-xs space-y-1">
+              <p className="font-semibold text-foreground">Current Allocation:</p>
+              <p className="text-muted-foreground">
+                {allocation?.hostel_name} · {allocation?.block_name} · Room {allocation?.room_number} (Bed {allocation?.bed_number})
+              </p>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label>Preferred Block / Floor</Label>
+              <Input
+                placeholder="e.g. Block B, 2nd Floor, Quiet Wing..."
+                value={preferredBlock}
+                onChange={(e) => setPreferredBlock(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label>Reason for Transfer * (min 5 chars)</Label>
+              <Textarea
+                placeholder="Explain the reason for requesting a change (e.g. academic schedule, health, mutual swap)..."
+                value={transferReason}
+                onChange={(e) => setTransferReason(e.target.value)}
+                required
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label>Special Notes / Medical Requirement</Label>
+              <Input
+                placeholder="e.g. Ground floor preference for mobility support..."
+                value={specialNotes}
+                onChange={(e) => setSpecialNotes(e.target.value)}
+              />
+            </div>
+
+            <DialogFooter className="pt-2">
+              <Button type="button" variant="outline" onClick={() => setTransferOpen(false)}>Cancel</Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Submitting..." : "Submit Transfer Request"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+

@@ -124,3 +124,149 @@ export async function getCurrentUser() {
     student_type: studentType,
   };
 }
+
+export async function createUserByAdmin(input: {
+  email: string;
+  password?: string;
+  full_name: string;
+  role: UserRole;
+  student_type?: string;
+  department?: string;
+  roll_number?: string;
+  employee_id?: string;
+  phone?: string;
+}) {
+  const current = await getCurrentUser();
+  if (!current || current.role !== "super_admin") {
+    return { error: "Unauthorized. Super Admin access required." };
+  }
+
+  const supabase = await createClient();
+  const rawPassword = input.password?.trim() || "Campus@12345";
+
+  // Create Auth User with user_metadata
+  const { data: authData, error: authError } = await supabase.auth.signUp({
+    email: input.email.trim().toLowerCase(),
+    password: rawPassword,
+    options: {
+      data: {
+        full_name: input.full_name.trim(),
+        role: input.role,
+        student_type: input.student_type || (input.role === "student" ? "HOSTELLER" : undefined),
+      },
+    },
+  });
+
+  if (authError && !authData?.user) {
+    return { error: authError.message };
+  }
+
+  const newUserId = authData.user?.id;
+  if (!newUserId) {
+    return { error: "Failed to generate user ID." };
+  }
+
+  const { error: profileError } = await supabase.from("profiles").upsert({
+    id: newUserId,
+    email: input.email.trim().toLowerCase(),
+    full_name: input.full_name.trim(),
+    role: input.role,
+    student_type: input.student_type || (input.role === "student" ? "HOSTELLER" : "HOSTELLER"),
+    department: input.department || null,
+    roll_number: input.roll_number || null,
+    employee_id: input.employee_id || null,
+    phone: input.phone || null,
+    is_active: true,
+  } as never);
+
+  if (profileError) {
+    return { error: profileError.message };
+  }
+
+  await supabase.from("audit_logs").insert({
+    actor_id: current.id,
+    action: "CREATE_USER",
+    entity_type: "profiles",
+    entity_id: newUserId,
+    metadata: { email: input.email, role: input.role, full_name: input.full_name },
+  } as never);
+
+  revalidatePath("/admin/users");
+  revalidatePath("/admin/dashboard");
+  return { success: true, userId: newUserId };
+}
+
+export async function updateUserByAdmin(
+  userId: string,
+  input: {
+    full_name?: string;
+    role?: UserRole;
+    student_type?: string;
+    department?: string;
+    roll_number?: string;
+    employee_id?: string;
+    phone?: string;
+    is_active?: boolean;
+  }
+) {
+  const current = await getCurrentUser();
+  if (!current || current.role !== "super_admin") {
+    return { error: "Unauthorized. Super Admin access required." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      ...input,
+      updated_at: new Date().toISOString(),
+    } as never)
+    .eq("id", userId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  await supabase.from("audit_logs").insert({
+    actor_id: current.id,
+    action: "UPDATE_USER",
+    entity_type: "profiles",
+    entity_id: userId,
+    metadata: input,
+  } as never);
+
+  revalidatePath("/admin/users");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
+}
+
+export async function toggleUserStatusByAdmin(userId: string, currentStatus: boolean) {
+  const current = await getCurrentUser();
+  if (!current || current.role !== "super_admin") {
+    return { error: "Unauthorized. Super Admin access required." };
+  }
+
+  const supabase = await createClient();
+  const nextStatus = !currentStatus;
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ is_active: nextStatus } as never)
+    .eq("id", userId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  await supabase.from("audit_logs").insert({
+    actor_id: current.id,
+    action: nextStatus ? "ACTIVATE_USER" : "DEACTIVATE_USER",
+    entity_type: "profiles",
+    entity_id: userId,
+    metadata: { is_active: nextStatus },
+  } as never);
+
+  revalidatePath("/admin/users");
+  revalidatePath("/admin/dashboard");
+  return { success: true, is_active: nextStatus };
+}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, LogOut, Menu, Search, Settings, User, X, GraduationCap, LayoutDashboard, BookOpen, CalendarDays, Bus, Building2, UtensilsCrossed, Users, ScrollText, Settings2, Route, BedDouble, UserCheck, ClipboardList, AlertCircle, CalendarCheck, CreditCard, BarChart3, BookMarked, IndianRupee, Star, UserCircle, ChevronRight } from "lucide-react";
+import { Bell, LogOut, Menu, Search, Settings, User, X, GraduationCap, LayoutDashboard, BookOpen, CalendarDays, Bus, Building2, UtensilsCrossed, Users, ScrollText, Settings2, Route, BedDouble, UserCheck, ClipboardList, AlertCircle, CalendarCheck, CreditCard, BarChart3, BookMarked, IndianRupee, Star, UserCircle, ChevronRight, Lightbulb, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -29,7 +29,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard, BookOpen, CalendarDays, Bus, Building2, UtensilsCrossed,
   Users, ScrollText, Settings2, Route, BedDouble, UserCheck, ClipboardList,
   AlertCircle, CalendarCheck, CreditCard, BarChart3, BookMarked, IndianRupee,
-  Star, UserCircle, Bell,
+  Star, UserCircle, Bell, Award, Lightbulb,
 };
 
 interface DashboardHeaderProps {

@@ -7,7 +7,7 @@ import {
   UtensilsCrossed, Users, ScrollText, Settings2, Route,
   BedDouble, UserCheck, ClipboardList, AlertCircle, CalendarCheck,
   CreditCard, BarChart3, BookMarked, IndianRupee, Star, UserCircle,
-  Bell, ChevronRight, GraduationCap, LogOut, Award,
+  Bell, ChevronRight, GraduationCap, LogOut, Award, Lightbulb,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ROLE_NAV, ROLE_LABELS, ROLE_COLORS } from "@/lib/types/roles";
@@ -25,7 +25,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   UtensilsCrossed, Users, ScrollText, Settings2, Route,
   BedDouble, UserCheck, ClipboardList, AlertCircle, CalendarCheck,
   CreditCard, BarChart3, BookMarked, IndianRupee, Star, UserCircle,
-  Bell, Award,
+  Bell, Award, Lightbulb,
 };
 
 interface AppSidebarProps {
