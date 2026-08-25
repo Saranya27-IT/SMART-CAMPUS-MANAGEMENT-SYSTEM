@@ -13,6 +13,7 @@ import { Utensils, Star, AlertCircle, Lightbulb, ChevronLeft, ChevronRight, Cale
 import { submitFeedback, createMessComplaint, submitMessSuggestion } from "@/lib/actions/mess";
 import { toast } from "sonner";
 import { format, addDays, startOfWeek, endOfWeek } from "date-fns";
+import { cn } from "@/lib/utils";
 
 type Props = {
   todayMenus: any[];
@@ -154,54 +155,73 @@ export function StudentMessClient({
   return (
     <div className="space-y-6">
       {/* Quick Student Actions Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl border bg-card shadow-sm">
-        <div>
-          <h3 className="font-bold text-lg flex items-center gap-2">
-            <Utensils className="w-5 h-5 text-primary" /> Student Mess Portal
-          </h3>
-          <p className="text-xs text-muted-foreground">View menus, rate daily meals, and submit suggestions to mess management.</p>
+      <div className="flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl border bg-card shadow-xs">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl gradient-mess text-white flex items-center justify-center shadow-md flex-shrink-0">
+            <Utensils className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-extrabold text-base text-foreground flex items-center gap-2">
+              Student Mess & Dining Portal
+            </h3>
+            <p className="text-xs text-muted-foreground">View real-time meal menus, review food quality, and suggest dishes.</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" onClick={() => setRatingOpen(true)} className="gap-1.5">
-            <Star className="w-4 h-4 fill-amber-400 text-amber-400" /> Rate Meal
+          <Button size="sm" onClick={() => setRatingOpen(true)} className="gradient-mess text-white border-0 hover:opacity-90 shadow-sm gap-1.5 text-xs font-bold rounded-xl">
+            <Star className="w-3.5 h-3.5 fill-white" /> Rate Meal
           </Button>
-          <Button size="sm" variant="outline" onClick={() => setSuggestionOpen(true)} className="gap-1.5">
-            <Lightbulb className="w-4 h-4 text-amber-500" /> Suggest Dish
+          <Button size="sm" variant="outline" onClick={() => setSuggestionOpen(true)} className="border-amber-200 hover:bg-amber-50 dark:border-amber-800 dark:hover:bg-amber-950/30 gap-1.5 text-xs rounded-xl">
+            <Lightbulb className="w-3.5 h-3.5 text-amber-500" /> Suggest Dish
           </Button>
-          <Button size="sm" variant="outline" onClick={() => setComplaintOpen(true)} className="gap-1.5">
-            <AlertCircle className="w-4 h-4 text-rose-500" /> Food Complaint
+          <Button size="sm" variant="outline" onClick={() => setComplaintOpen(true)} className="border-rose-200 hover:bg-rose-50 dark:border-rose-800 dark:hover:bg-rose-950/30 gap-1.5 text-xs rounded-xl">
+            <AlertCircle className="w-3.5 h-3.5 text-rose-500" /> Food Complaint
           </Button>
         </div>
       </div>
 
       {/* Today's Menu Cards */}
       <div>
-        <h3 className="text-base font-bold mb-3 flex items-center gap-2">
-          <span>Today's Menu</span>
-          <Badge variant="outline" className="font-normal text-xs">{format(new Date(), "EEEE, dd MMM yyyy")}</Badge>
-        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-base font-bold flex items-center gap-2">
+            <span>Today's Dining Menu</span>
+          </h3>
+          <Badge variant="outline" className="font-semibold text-xs bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800">
+            {format(new Date(), "EEEE, dd MMM yyyy")}
+          </Badge>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {(["breakfast", "lunch", "snacks", "dinner"] as const).map((meal) => {
             const items = todayMenuMap[meal] || [];
+            const mealAccent =
+              meal === "breakfast"
+                ? "border-amber-200/80 hover:border-amber-300 dark:border-amber-900/60"
+                : meal === "lunch"
+                ? "border-orange-200/80 hover:border-orange-300 dark:border-orange-900/60"
+                : meal === "snacks"
+                ? "border-emerald-200/80 hover:border-emerald-300 dark:border-emerald-900/60"
+                : "border-indigo-200/80 hover:border-indigo-300 dark:border-indigo-900/60";
+
             return (
-              <Card key={meal} className="border hover:border-primary/40 transition-all flex flex-col justify-between">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2 capitalize">
-                    <span className="text-xl">{mealIcons[meal]}</span>
+              <Card key={meal} className={cn("rounded-2xl border bg-card hover:shadow-xs transition-all flex flex-col justify-between overflow-hidden", mealAccent)}>
+                <CardHeader className="pb-3 border-b bg-muted/20">
+                  <CardTitle className="text-base flex items-center gap-2.5 capitalize">
+                    <span className="text-2xl">{mealIcons[meal]}</span>
                     <div>
-                      <p className="font-bold text-base">{meal}</p>
-                      <p className="text-[11px] text-muted-foreground font-normal">{mealTimes[meal]}</p>
+                      <p className="font-bold text-sm text-foreground">{meal}</p>
+                      <p className="text-[11px] text-muted-foreground font-medium font-mono">{mealTimes[meal]}</p>
                     </div>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-0">
+                <CardContent className="p-4 flex-1">
                   {items.length === 0 ? (
-                    <p className="text-xs text-muted-foreground italic py-3">Menu items not posted yet.</p>
+                    <p className="text-xs text-muted-foreground italic py-4 text-center">Menu items not posted yet.</p>
                   ) : (
-                    <div className="p-3 rounded-lg bg-muted/40 space-y-1.5">
+                    <div className="space-y-2">
                       {items.map((item, idx) => (
                         <div key={idx} className="flex items-start gap-2 text-xs">
-                          <span className="text-primary font-bold">•</span>
+                          <span className="text-amber-500 font-black">•</span>
                           <span className="text-foreground font-medium">{item}</span>
                         </div>
                       ))}
@@ -215,19 +235,19 @@ export function StudentMessClient({
       </div>
 
       {/* Weekly Menu Viewer */}
-      <Card>
-        <CardHeader className="pb-3">
+      <Card className="rounded-2xl border shadow-xs overflow-hidden">
+        <CardHeader className="pb-3 border-b bg-muted/20">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <CardTitle className="text-base font-bold flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary" /> Weekly Menu Schedule
+                <Calendar className="w-4 h-4 text-amber-500" /> Weekly Menu Schedule
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-xs">
                 {format(new Date(startDate), "MMM dd")} — {format(new Date(endDate), "MMM dd, yyyy")}
               </CardDescription>
             </div>
             {/* Day Selector Pills */}
-            <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
               {daysList.map((dayStr) => {
                 const dObj = new Date(dayStr);
                 const isSelected = selectedDay === dayStr;
@@ -236,14 +256,14 @@ export function StudentMessClient({
                     key={dayStr}
                     type="button"
                     onClick={() => setSelectedDay(dayStr)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex flex-col items-center ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex flex-col items-center cursor-pointer ${
                       isSelected
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
+                        ? "gradient-mess text-white shadow-xs"
+                        : "bg-card border text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`}
                   >
                     <span>{format(dObj, "EEE")}</span>
-                    <span className="text-[10px] opacity-80">{format(dObj, "dd")}</span>
+                    <span className="text-[10px] opacity-85">{format(dObj, "dd")}</span>
                   </button>
                 );
               })}

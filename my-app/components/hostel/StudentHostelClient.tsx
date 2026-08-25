@@ -172,34 +172,36 @@ export function StudentHostelClient({ overviewData }: Props) {
     <div className="space-y-6">
       {/* Allocation Banner Card */}
       {allocation ? (
-        <Card className="border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent overflow-hidden">
+        <Card className="border-purple-200/80 dark:border-purple-900/60 bg-gradient-to-r from-purple-500/10 via-indigo-500/5 to-transparent rounded-3xl overflow-hidden shadow-xs">
           <CardContent className="p-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shadow-md flex-shrink-0">
+                <div className="w-14 h-14 rounded-2xl gradient-hostel text-white flex items-center justify-center shadow-md flex-shrink-0">
                   <BedDouble className="h-7 w-7" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl font-black tracking-tight">{allocation.hostel_name}</span>
-                    <Badge variant="secondary" className="font-semibold">{allocation.block_name}</Badge>
+                    <span className="text-2xl font-black tracking-tight text-foreground">{allocation.hostel_name}</span>
+                    <Badge className="font-bold text-xs bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border-purple-200 dark:border-purple-800">
+                      {allocation.block_name}
+                    </Badge>
                   </div>
                   <p className="text-sm font-medium text-muted-foreground mt-0.5">
                     Room <span className="font-bold text-foreground">{allocation.room_number}</span> · Bed <span className="font-bold text-foreground">{allocation.bed_number}</span> · Floor {allocation.floor_number}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-primary" /> Condition: <span className="font-medium text-foreground">{allocation.room_condition || "Good"}</span>
+                    <MapPin className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> Condition: <span className="font-semibold text-foreground">{allocation.room_condition || "Good"}</span>
                   </p>
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                <Button size="sm" className="gap-1.5 flex-1 sm:flex-initial" onClick={() => setLeaveOpen(true)}>
+                <Button size="sm" className="gradient-hostel text-white border-0 hover:opacity-90 shadow-sm gap-1.5 flex-1 sm:flex-initial text-xs font-bold rounded-xl" onClick={() => setLeaveOpen(true)}>
                   <Plus className="w-4 h-4" /> Apply Leave
                 </Button>
-                <Button size="sm" variant="outline" className="gap-1.5 flex-1 sm:flex-initial" onClick={() => setTransferOpen(true)}>
-                  <ArrowRightLeft className="w-4 h-4 text-indigo-500" /> Room Change
+                <Button size="sm" variant="outline" className="border-purple-200 hover:bg-purple-50 dark:border-purple-800 dark:hover:bg-purple-950/30 gap-1.5 flex-1 sm:flex-initial text-xs rounded-xl" onClick={() => setTransferOpen(true)}>
+                  <ArrowRightLeft className="w-4 h-4 text-purple-600 dark:text-purple-400" /> Room Change
                 </Button>
-                <Button size="sm" variant="outline" className="gap-1.5 flex-1 sm:flex-initial" onClick={() => setComplaintOpen(true)}>
+                <Button size="sm" variant="outline" className="border-rose-200 hover:bg-rose-50 dark:border-rose-800 dark:hover:bg-rose-950/30 gap-1.5 flex-1 sm:flex-initial text-xs rounded-xl" onClick={() => setComplaintOpen(true)}>
                   <AlertCircle className="w-4 h-4 text-rose-500" /> Raise Complaint
                 </Button>
               </div>
@@ -207,7 +209,7 @@ export function StudentHostelClient({ overviewData }: Props) {
           </CardContent>
         </Card>
       ) : (
-        <Card className="border-dashed border-amber-300 bg-amber-50/50 dark:bg-amber-950/20">
+        <Card className="border-dashed border-amber-300 bg-amber-50/50 dark:bg-amber-950/20 rounded-3xl">
           <CardContent className="py-8 text-center space-y-2">
             <Building2 className="h-10 w-10 mx-auto text-amber-600" />
             <h3 className="font-semibold text-lg">No Active Room Bed Allocation</h3>
@@ -220,50 +222,50 @@ export function StudentHostelClient({ overviewData }: Props) {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+        <Card className="rounded-2xl border bg-card hover:border-purple-300 dark:hover:border-purple-800 transition-all shadow-xs">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400">
+            <div className="p-3 rounded-2xl bg-purple-50 text-purple-600 dark:bg-purple-950/50 dark:text-purple-300">
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium">Roommates</p>
-              <p className="text-xl font-bold">{roommates.length}</p>
+              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Roommates</p>
+              <p className="text-xl font-black text-foreground mt-0.5">{roommates.length}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-2xl border bg-card hover:border-indigo-300 dark:hover:border-indigo-800 transition-all shadow-xs">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
+            <div className="p-3 rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-300">
               <CreditCard className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium">Pending Fees</p>
-              <p className="text-xl font-bold text-rose-600">₹{data?.totalPendingFee ?? 0}</p>
+              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Pending Fees</p>
+              <p className="text-xl font-black text-rose-600 mt-0.5">₹{data?.totalPendingFee ?? 0}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-2xl border bg-card hover:border-amber-300 dark:hover:border-amber-800 transition-all shadow-xs">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400">
+            <div className="p-3 rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-300">
               <ClipboardList className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium">Leave Requests</p>
-              <p className="text-xl font-bold">{leaves.length}</p>
+              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Leave Applications</p>
+              <p className="text-xl font-black text-foreground mt-0.5">{leaves.length}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-2xl border bg-card hover:border-rose-300 dark:hover:border-rose-800 transition-all shadow-xs">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:text-rose-400">
+            <div className="p-3 rounded-2xl bg-rose-50 text-rose-600 dark:bg-rose-950/50 dark:text-rose-300">
               <AlertCircle className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium">Complaints</p>
-              <p className="text-xl font-bold">{complaints.length}</p>
+              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Complaints</p>
+              <p className="text-xl font-black text-foreground mt-0.5">{complaints.length}</p>
             </div>
           </CardContent>
         </Card>

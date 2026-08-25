@@ -196,6 +196,34 @@
     background: linear-gradient(135deg, oklch(0.48 0.18 270) 0%, oklch(0.58 0.19 285) 100%);
   }
 
+  .gradient-admin {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  }
+
+  .gradient-hostel {
+    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+  }
+
+  .gradient-mess {
+    background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+  }
+
+  .gradient-bus {
+    background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+  }
+
+  .gradient-events {
+    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  }
+
+  .gradient-library {
+    background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
+  }
+
+  .gradient-notifications {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  }
+
   .gradient-amber {
     background: linear-gradient(135deg, oklch(0.78 0.18 75) 0%, oklch(0.70 0.20 50) 100%);
   }
@@ -249,6 +277,6 @@
   
   /* Table overrides */
   .table-responsive-container {
-    @apply w-full overflow-x-auto rounded-xl border border-border/80 bg-card shadow-sm;
+    @apply w-full overflow-x-auto rounded-2xl border border-border/80 bg-card shadow-xs;
   }
 }

@@ -86,39 +86,39 @@ export const DATE_FORMATS = {
 // ── Status badge colors (Tailwind) ────────────────────────────
 export const STATUS_COLORS: Record<string, string> = {
   // Generic
-  active: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  inactive: "bg-gray-100 text-gray-600 border-gray-200",
-  pending: "bg-amber-100 text-amber-700 border-amber-200",
-  approved: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  rejected: "bg-rose-100 text-rose-700 border-rose-200",
+  active: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60",
+  inactive: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-900/60 dark:text-slate-300 dark:border-slate-800/60",
+  pending: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60",
+  approved: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60",
+  rejected: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60",
   // Borrow
-  borrowed: "bg-blue-100 text-blue-700 border-blue-200",
-  returned: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  overdue: "bg-rose-100 text-rose-700 border-rose-200",
-  lost: "bg-gray-100 text-gray-600 border-gray-200",
+  borrowed: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60",
+  returned: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60",
+  overdue: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60",
+  lost: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-900/60 dark:text-slate-300 dark:border-slate-800/60",
   // Events
-  draft: "bg-gray-100 text-gray-600 border-gray-200",
-  upcoming: "bg-blue-100 text-blue-700 border-blue-200",
-  ongoing: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  completed: "bg-violet-100 text-violet-700 border-violet-200",
-  cancelled: "bg-rose-100 text-rose-700 border-rose-200",
+  draft: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-900/60 dark:text-slate-300 dark:border-slate-800/60",
+  upcoming: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60",
+  ongoing: "bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800/60",
+  completed: "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800/60",
+  cancelled: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60",
   // Trips
-  scheduled: "bg-blue-100 text-blue-700 border-blue-200",
-  in_progress: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  scheduled: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60",
+  in_progress: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60",
   // Complaints
-  open: "bg-rose-100 text-rose-700 border-rose-200",
-  in_progress2: "bg-amber-100 text-amber-700 border-amber-200",
-  resolved: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  closed: "bg-gray-100 text-gray-600 border-gray-200",
+  open: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60",
+  in_progress2: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60",
+  resolved: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60",
+  closed: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-900/60 dark:text-slate-300 dark:border-slate-800/60",
   // Beds
-  available: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  occupied: "bg-blue-100 text-blue-700 border-blue-200",
-  maintenance: "bg-amber-100 text-amber-700 border-amber-200",
+  available: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60",
+  occupied: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60",
+  maintenance: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60",
   // Priority
-  low: "bg-gray-100 text-gray-600 border-gray-200",
-  medium: "bg-amber-100 text-amber-700 border-amber-200",
-  high: "bg-orange-100 text-orange-700 border-orange-200",
-  urgent: "bg-rose-100 text-rose-700 border-rose-200",
+  low: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-900/60 dark:text-slate-300 dark:border-slate-800/60",
+  medium: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60",
+  high: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-800/60",
+  urgent: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60",
 } as const;
 
 // ── Navigation ────────────────────────────────────────────────

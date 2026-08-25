@@ -14,14 +14,14 @@ export const ROLE_LABELS: Record<UserRole, string> = {
 };
 
 export const ROLE_COLORS: Record<UserRole, string> = {
-  super_admin: "bg-rose-100 text-rose-700 border-rose-200",
-  student: "bg-blue-100 text-blue-700 border-blue-200",
-  faculty: "bg-violet-100 text-violet-700 border-violet-200",
-  librarian: "bg-amber-100 text-amber-700 border-amber-200",
-  event_organizer: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  bus_driver: "bg-orange-100 text-orange-700 border-orange-200",
-  hostel_warden: "bg-cyan-100 text-cyan-700 border-cyan-200",
-  mess_manager: "bg-pink-100 text-pink-700 border-pink-200",
+  super_admin: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60",
+  student: "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800/60",
+  faculty: "bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-950/40 dark:text-violet-300 dark:border-violet-800/60",
+  librarian: "bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-950/40 dark:text-cyan-300 dark:border-cyan-800/60",
+  event_organizer: "bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-950/40 dark:text-pink-300 dark:border-pink-800/60",
+  bus_driver: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60",
+  hostel_warden: "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800/60",
+  mess_manager: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60",
 };
 
 
